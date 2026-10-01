@@ -9,7 +9,7 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151d;--card:#182030;--ink:#e6edf7;--text:#d3dbe8;--mute:#93a0b5;--line:#2c3a52;--acc:#6aa8f0;--soft:#1b2a40;--ok:#56c58e;--warn:#e3a43a;--err:#ff7b6b}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-header{background:var(--ink);color:#fff;padding:28px 16px}
+header{background:#14325a;color:#fff;padding:28px 16px}
 header .w,main{max-width:860px;margin:0 auto}
 header h1{margin:0 0 4px;font-size:1.7rem}
 header p{margin:0;opacity:.9}
@@ -34,7 +34,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--acc);outline-off
 .opt b{width:1.2em;color:var(--ink)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chips label{display:inline-flex;align-items:center;gap:6px;margin:0;font-weight:500;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
-button{font:inherit;cursor:pointer;border-radius:9px;border:1px solid var(--acc);background:var(--acc);color:#fff;padding:10px 18px;font-weight:600}
+button{font:inherit;cursor:pointer;border-radius:9px;border:1px solid var(--acc);background:var(--acc);color:var(--card);padding:10px 18px;font-weight:600}
 button.ghost{background:transparent;color:var(--acc)}
 button.danger{background:transparent;border-color:var(--err);color:var(--err);padding:4px 10px;font-size:.85rem}
 .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
@@ -49,12 +49,25 @@ button.danger{background:transparent;border-color:var(--err);color:var(--err);pa
 .msg.ok{background:color-mix(in srgb,var(--ok) 12%,transparent);border:1px solid var(--ok)}
 .msg.warn{background:color-mix(in srgb,var(--warn) 14%,transparent);border:1px solid var(--warn)}
 .msg ul{margin:6px 0 0 18px;padding:0}
-.steps{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 6px;padding:0;list-style:none;font-size:.85rem}
-.steps li{background:var(--soft);border-radius:999px;padding:3px 12px;color:var(--ink)}
+nav.stepnav{position:sticky;top:0;z-index:8;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:0 4px 12px #0000000f}
+.steps{display:flex;gap:6px;flex-wrap:wrap;max-width:860px;margin:0 auto;padding:10px 16px;list-style:none;font-size:.9rem}
+.steps a{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border:2px solid transparent;border-radius:999px;padding:4px 12px;color:var(--ink);text-decoration:none;font-weight:600}
+.steps a:hover{border-color:var(--acc)}
+.steps a.on{background:var(--acc);color:var(--card)}
+.steps a .st{display:none;font-size:.75rem;border-radius:999px;padding:0 7px;color:#fff}
+.steps a .st.bad{display:inline;background:var(--err)}.steps a .st.good{display:inline;background:var(--ok)}
+section{scroll-margin-top:64px}
+.nextstep{display:flex;justify-content:flex-end;margin-top:16px}
+.nextstep a{background:var(--acc);color:var(--card);border-radius:9px;padding:10px 18px;font-weight:600;text-decoration:none}
+.msg li a{color:inherit}
+.msg a:not(li a){color:var(--acc);font-weight:600}
+@media (max-width:640px){.steps{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.steps li{flex:none}}
+.proof{margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.proof .pf{display:flex;align-items:center;gap:8px;background:var(--soft);border-radius:9px;padding:6px 10px;font-weight:600;color:var(--ink)}
 .tag{display:inline-block;font-size:.72rem;font-weight:700;border-radius:6px;padding:1px 7px;background:var(--soft);color:var(--acc);vertical-align:middle;margin-left:6px}
 .final{border-color:var(--acc2)}
 .hidden{display:none!important}
-#toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);max-width:90vw;background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;z-index:9;box-shadow:0 4px 18px #0006}
+#toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);max-width:90vw;background:#14325a;color:#fff;padding:10px 16px;border-radius:10px;z-index:9;box-shadow:0 4px 18px #0006}
 .confirm{border:3px solid var(--ok);border-radius:16px;background:var(--card);padding:20px;margin:14px 0;text-align:center}
 .confirm.pending{border-color:var(--warn)}
 .confirm .ck{width:52px;height:52px;margin:0 auto 6px;border-radius:50%;background:var(--ok);color:#fff;font-size:30px;line-height:52px;font-weight:700}
@@ -74,16 +87,20 @@ summary{cursor:pointer;color:var(--acc);font-weight:600}
   <h1>Family Lore &ndash; Order Form</h1>
   <p>Tell us about your family and we&rsquo;ll turn your stories and photos into a personalised game. It takes about 20&ndash;40 minutes. You can stop and come back: your text is saved on this device.</p>
 </div></header>
+<nav class="stepnav" aria-label="Form steps"><ol class="steps"><li><a href="#s1" data-step="1">1 About you &amp; your order <span class="st"></span></a></li><li><a href="#s2" data-step="2">2 Your game <span class="st"></span></a></li><li><a href="#s3" data-step="3">3 People &amp; photos <span class="st"></span></a></li><li><a href="#s4" data-step="4">4 Questions <span class="st"></span></a></li><li><a href="#s5" data-step="5">5 Check &amp; send <span class="st"></span></a></li></ol></nav>
 <main>
-<ol class="steps"><li>1 About you</li><li>2 Your game</li><li>3 People &amp; photos</li><li>4 Questions</li><li>5 Send</li></ol>
 
-<section id="s1"><h2>1. About you</h2><p class="lead">So we know who to send your proofs to.</p>
+<section id="s1"><h2>1. About you &amp; your order</h2><p class="lead">So we can match this form to your Etsy order and know where to send your preview.</p>
   <div class="row">
     <div><label for="c_name">Your name *</label><input type="text" id="c_name" maxlength="80" autocomplete="name"></div>
     <div><label for="c_email">Email *</label><input type="email" id="c_email" maxlength="120" autocomplete="email"></div>
     <div><label for="c_phone">Phone <small>(optional)</small></label><input type="tel" id="c_phone" maxlength="30" autocomplete="tel"></div>
-    <div><label for="c_ref">Etsy order number <small>(from your Etsy receipt, so we can match your order)</small></label><input type="text" id="c_ref" maxlength="40"></div>
+    <div><label for="c_ref">Etsy order number * <small>(in your Etsy confirmation email, or Etsy &gt; Purchases)</small></label><input type="text" id="c_ref" maxlength="40" inputmode="numeric" placeholder="e.g. 3412987650"></div>
   </div>
+  <label for="proofFile">Proof of purchase * <small>(a screenshot of your Etsy order confirmation email, or of this order in Etsy &gt; Purchases and reviews. Image or PDF)</small></label>
+  <input type="file" id="proofFile" accept="image/*,application/pdf">
+  <div class="proof" id="proofBox"></div>
+  <div class="nextstep"><a href="#s2">Next: Your game &rarr;</a></div>
 </section>
 
 <section id="s2"><h2>2. Your game</h2><p class="lead">These exact words appear on your cards, instructions and box artwork, so please check the spelling.</p>
@@ -114,6 +131,7 @@ summary{cursor:pointer;color:var(--acc);font-weight:600}
   </div>
   <div id="coverPhotoBox" class="hidden"><label for="coverPhoto">Cover photo * <small>(one photo, portrait works best)</small></label><input type="file" id="coverPhoto" accept="image/*"><div class="pics" id="coverPics"></div></div>
   <p class="hint">Everything is kept warm and family-friendly. Anything you list here is also checked against your questions before we start.</p>
+  <div class="nextstep"><a href="#s3">Next: People &amp; photos &rarr;</a></div>
 </section>
 
 <section id="s3"><h2>3. People &amp; photos</h2>
@@ -121,6 +139,7 @@ summary{cursor:pointer;color:var(--acc);font-weight:600}
   <div class="msg warn"><b>Photo tips.</b> 1&ndash;3 clear photos per person: face clearly visible, good lighting, front or slightly turned, no sunglasses or hats covering the face. Group photos are fine, but tell us who is who in the notes.</div>
   <div id="people"></div>
   <div class="bar"><button type="button" class="ghost" id="addPerson">+ Add a person</button></div>
+  <div class="nextstep"><a href="#s4">Next: Questions &rarr;</a></div>
 </section>
 
 <section id="s4"><h2>4. Your questions</h2>
@@ -131,6 +150,7 @@ summary{cursor:pointer;color:var(--acc);font-weight:600}
   </div>
   <div class="msg warn" id="modeHelp"><b>Tips.</b> Only real facts you give us are used as correct answers. The last question is the <b>Final wager</b> card in the Advanced game, so make it a good one. For &ldquo;which is NOT true&rdquo; questions, mark the <em>false</em> statement as the correct answer.</div>
   <div id="qs"></div>
+  <div class="nextstep"><a href="#s5">Next: Check &amp; send &rarr;</a></div>
 </section>
 
 <section id="s5"><h2>5. Check &amp; send</h2>
@@ -189,6 +209,8 @@ let people = [];                 // {id, name, role, pet, look, files:[File]}
 let uid = 0;
 let cardPhotos = {};             // question number -> File (own-photo cards)
 let coverFile = null;
+let proofFile = null;
+const MAX_PROOF = 15 * 1048576;
 const artStyle = () => $("input[name=artstyle]:checked").value;
 const coverStyle = () => $("input[name=coverstyle]:checked").value;
 const artOf = d => { const st = artStyle(); if (st !== "mixed") return st; const r = $(`input[name=art${d.dataset.i}]:checked`, d); return r ? r.value : "cartoon"; };
@@ -336,7 +358,7 @@ function collect() {
   });
   return {
     schema:"familylore-intake-v1", form_version:FORM_VERSION, submitted_at:new Date().toISOString(),
-    contact:{name:$("#c_name").value.trim(), email:$("#c_email").value.trim(), phone:$("#c_phone").value.trim(), order_ref:$("#c_ref").value.trim()},
+    contact:{name:$("#c_name").value.trim(), email:$("#c_email").value.trim(), phone:$("#c_phone").value.trim(), order_ref:$("#c_ref").value.replace(/[\s#]/g, "")},
     game:{name:$("#g_name").value.trim(), occasion:$("#g_occ").value==="Other" ? ($("#g_occ2").value.trim()||"Other") : $("#g_occ").value, tagline:$("#g_tag").value.trim()||"Laugh. Remember. Play.",
           question_count:n, audience:$("#g_aud").value.trim(), humour_boundaries:$("#g_bound").value.trim(),
           art_style:artStyle(), cover_style:coverStyle()},
@@ -351,6 +373,8 @@ function validate(sub) {
   const c = sub.contact, g = sub.game;
   if (!c.name) err.push("Step 1: please enter your name.");
   if (!/^\S+@\S+\.\S+$/.test(c.email)) err.push("Step 1: please enter a valid email address.");
+  if (!/^\d{6,15}$/.test(c.order_ref)) err.push("Step 1: enter your Etsy order number (numbers only). It is in your Etsy confirmation email and in Etsy > Purchases.");
+  if (!proofFile) err.push("Step 1: attach your proof of purchase (a screenshot of your Etsy order confirmation email, or of the order in Etsy > Purchases).");
   if (!g.name) err.push("Step 2: please enter the game title.");
   if (!g.occasion) err.push("Step 2: please choose the occasion.");
   const names = sub.people.map(p=>p.name.toLowerCase());
@@ -390,10 +414,16 @@ function validate(sub) {
   if (!sub.permission.photos || !sub.permission.accuracy) err.push("Step 5: please tick both confirmations.");
   return {err, warn};
 }
+const stepOf = e => { const m = /^Step (\d)/.exec(e); return m ? m[1] : /^(Question|Memory|Card)/.test(e) ? "4" : "5"; };
+function markSteps(v) {
+  const bad = {}; v.err.forEach(e => { const k = stepOf(e); bad[k] = (bad[k] || 0) + 1; });
+  $$(".steps a").forEach(a => { const b = $(".st", a), n = bad[a.dataset.step]; b.className = "st " + (n ? "bad" : "good"); b.textContent = n ? n : "\u2713"; });
+}
 function showResult(v, extra) {
+  markSteps(v);
   const r = $("#result");
   let h = "";
-  if (v.err.length) h += `<div class="msg err"><b>${v.err.length} thing${v.err.length>1?"s":""} to fix before we can send this:</b><ul>${v.err.map(e=>`<li>${esc(e)}</li>`).join("")}</ul></div>`;
+  if (v.err.length) h += `<div class="msg err"><b>${v.err.length} thing${v.err.length>1?"s":""} to fix before we can send this</b> (click one to go there):<ul>${v.err.map(e=>`<li><a href="#s${stepOf(e)}">${esc(e)}</a></li>`).join("")}</ul></div>`;
   if (v.warn.length) h += `<div class="msg warn"><b>Worth a look (you can still send):</b><ul>${v.warn.map(e=>`<li>${esc(e)}</li>`).join("")}</ul></div>`;
   if (!v.err.length && !v.warn.length) h += `<div class="msg ok">Everything looks complete.</div>`;
   r.innerHTML = h + (extra||"");
@@ -436,6 +466,7 @@ async function buildZip(sub) {
   const ext = f => (f.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"") || "jpg";
   for (const it of sub.items) if (it.art === "photo" && cardPhotos[it.n]) it.card_photo = await addPhoto(cardPhotos[it.n], `photos/cards/q${String(it.n).padStart(2,"0")}.${ext(cardPhotos[it.n])}`);
   if (sub.game.cover_style === "photo" && coverFile) sub.game.cover_photo = await addPhoto(coverFile, `photos/cover.${ext(coverFile)}`);
+  if (proofFile) { const pe = /pdf$/i.test(proofFile.type) || /\.pdf$/i.test(proofFile.name) ? "pdf" : ext(proofFile); sub.proof = await addPhoto(proofFile, `proof/etsy_order.${pe}`); }
   files.unshift({name:"submission.json", data:enc.encode(JSON.stringify(sub, null, 2))});
   files.push({name:"README.txt", data:enc.encode(`Family Lore order file.\nOrder reference: ${sub.reference || "-"}\nDo not edit. Send this whole .zip back to us.\nContains submission.json and your photos.\n`)});
   return {blob:makeZip(files), total};
@@ -470,6 +501,24 @@ const keepQs = () => $$("#qs .card").map(d => { const o = {who:[...d._who], art:
 $$("input[name=artstyle]").forEach(r => r.onchange = () => { renderQs(keepQs()); updateArtHelp(); save(); });
 $$("input[name=coverstyle]").forEach(r => r.onchange = () => { updateArtHelp(); save(); });
 $("#coverPhoto").onchange = e => { const f = e.target.files[0]; const bad = f && okImage(f); if (bad) notify(bad); else if (f) { coverFile = f; const b = $("#coverPics"); b.innerHTML = ""; b.appendChild(thumb(f, () => { coverFile = null; b.innerHTML = ""; })); } e.target.value = ""; };
+$("#proofFile").onchange = e => {
+  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  const pdf = /pdf$/i.test(f.type) || /\.pdf$/i.test(f.name), bad = pdf ? (f.size > MAX_PROOF ? `${f.name}: too large; please use a file under 15 MB.` : "") : okImage(f);
+  if (bad) return notify(bad);
+  proofFile = f; const box = $("#proofBox"); box.innerHTML = "";
+  const tag = document.createElement("span"); tag.className = "pf"; tag.textContent = (pdf ? "PDF: " : "") + f.name;
+  const x = document.createElement("button"); x.type = "button"; x.className = "danger"; x.textContent = "Remove"; x.onclick = () => { proofFile = null; box.innerHTML = ""; };
+  if (!pdf) { const fig = thumb(f, x.onclick); box.appendChild(fig); }
+  box.append(tag, x);
+};
+{ // highlight the step being filled in; keep it visible in the (scrollable) step bar on phones
+  const secs = $$("main section[id]"), bar = $(".steps"); let cur = "";
+  const spy = () => { let id = secs[0].id; for (const sec of secs) if (sec.getBoundingClientRect().top < innerHeight * 0.4) id = sec.id;
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) id = secs[secs.length - 1].id;   // at the bottom: last step
+    if (id === cur) return; cur = id; $$(".steps a").forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + id));
+    const a = $(`.steps a[href="#${id}"]`); if (a && bar.scrollWidth > bar.clientWidth) bar.scrollLeft = a.parentElement.offsetLeft - 16; };
+  addEventListener("scroll", spy, {passive: true}); spy();   // five rect reads per scroll: cheap enough unthrottled
+}
 function updateCount() {
   const n = nQ();
   $("#nHint").innerHTML = `<b>${n} question cards.</b> Please choose the number you bought (10, 20 or 30). Depending on your option you also get the online game for any screen and/or the print-ready printer pack: mission cards (you choose which), 6 power-up cards, box artwork, instructions and a scorecard.`;
