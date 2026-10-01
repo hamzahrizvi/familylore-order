@@ -55,6 +55,16 @@ button.danger{background:transparent;border-color:var(--err);color:var(--err);pa
 .final{border-color:var(--acc2)}
 .hidden{display:none!important}
 #toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);max-width:90vw;background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;z-index:9;box-shadow:0 4px 18px #0006}
+.confirm{border:3px solid var(--ok);border-radius:16px;background:var(--card);padding:20px;margin:14px 0;text-align:center}
+.confirm.pending{border-color:var(--warn)}
+.confirm .ck{width:52px;height:52px;margin:0 auto 6px;border-radius:50%;background:var(--ok);color:#fff;font-size:30px;line-height:52px;font-weight:700}
+.confirm.pending .ck{background:var(--warn)}
+.confirm h3{margin:0;color:var(--ink);font-size:1.3rem}
+.confirm .lbl{margin:12px 0 2px;color:var(--mute);font-size:.85rem;text-transform:uppercase;letter-spacing:.08em}
+.confirm .ref{font:700 2rem/1.1 ui-monospace,Consolas,monospace;letter-spacing:.06em;color:var(--ink);word-break:break-all}
+.confirm dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;text-align:left;max-width:420px;margin:14px auto 0}
+.confirm dt{color:var(--mute);font-weight:600}.confirm dd{margin:0;color:var(--text);font-weight:600;overflow-wrap:anywhere}
+.confirm .shot{margin:14px 0 0;padding:10px 12px;border-radius:10px;background:var(--soft);color:var(--ink);font-weight:600}
 details{margin:8px 0}
 summary{cursor:pointer;color:var(--acc);font-weight:600}
 </style>
@@ -427,7 +437,7 @@ async function buildZip(sub) {
   for (const it of sub.items) if (it.art === "photo" && cardPhotos[it.n]) it.card_photo = await addPhoto(cardPhotos[it.n], `photos/cards/q${String(it.n).padStart(2,"0")}.${ext(cardPhotos[it.n])}`);
   if (sub.game.cover_style === "photo" && coverFile) sub.game.cover_photo = await addPhoto(coverFile, `photos/cover.${ext(coverFile)}`);
   files.unshift({name:"submission.json", data:enc.encode(JSON.stringify(sub, null, 2))});
-  files.push({name:"README.txt", data:enc.encode("Family Lore order file.\nDo not edit. Send this whole .zip back to us.\nContains submission.json and your photos.\n")});
+  files.push({name:"README.txt", data:enc.encode(`Family Lore order file.\nOrder reference: ${sub.reference || "-"}\nDo not edit. Send this whole .zip back to us.\nContains submission.json and your photos.\n`)});
   return {blob:makeZip(files), total};
 }
 
@@ -471,10 +481,22 @@ $("#g_n").onchange = () => { renderQs(keepQs()); updateArtHelp(); updateCount();
 $$("input[name=mode]").forEach(r => r.onchange = () => { renderQs(); updateArtHelp(); save(); });
 $$("main input[id],main select[id],main textarea[id]").forEach(e => e.addEventListener("input", save));
 $("#check").onclick = () => showResult(validate(collect()));
+function makeRef() {               // e.g. FL-261001-K7QM: date + 4 unambiguous random characters
+  const A = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", r = crypto.getRandomValues(new Uint8Array(4)), d = new Date();
+  return "FL-" + String(d.getFullYear() % 100).padStart(2, "0") + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0") + "-" + [...r].map(b => A[b % 32]).join("");
+}
+function confirmCard(sub, ref, sent) {
+  const when = new Date().toLocaleString(undefined, {dateStyle:"medium", timeStyle:"short"});
+  const rows = [["Etsy order", sub.contact.order_ref || "not given"], ["Name", sub.contact.name], ["Game", sub.game.name], ["Questions", sub.game.question_count], [sent ? "Sent" : "Saved", when]];
+  return `<div class="confirm${sent ? "" : " pending"}" id="confirm"><div class="ck">${sent ? "\u2713" : "!"}</div>`
+    + `<h3>${sent ? "Order received. Thank you!" : "Order saved, but not sent yet"}</h3><div class="lbl">Your order reference</div><div class="ref">${esc(ref)}</div>`
+    + `<dl>${rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`
+    + `<p class="shot">${sent ? "Take a screenshot of this box and send it to us in your Etsy messages as proof of your order." : `Email the order file to <b>${esc(RETURN_TO)}</b> first, then screenshot this box and send it to us in your Etsy messages.`}</p></div>`;
+}
 async function upload(blob, name, sub) {
   const b64 = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(",")[1]); r.onerror = () => rej(r.error); r.readAsDataURL(blob); });
   const resp = await fetch(UPLOAD_URL, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"},   // text/plain: no CORS preflight
-    body: JSON.stringify({name, order_ref:sub.contact.order_ref, customer:sub.contact.name, email:sub.contact.email, game:sub.game.name, data:b64})});
+    body: JSON.stringify({name, reference:sub.reference, order_ref:sub.contact.order_ref, customer:sub.contact.name, email:sub.contact.email, game:sub.game.name, data:b64})});
   const j = await resp.json(); if (!j.ok) throw new Error(j.error || "upload refused"); return j;
 }
 const BUILD_LABEL = "Send my order";
@@ -483,24 +505,26 @@ $("#build").onclick = async () => {
   const sub = collect(), v = validate(sub);
   if (v.err.length) return showResult(v);
   btn.disabled = true; btn.textContent = "Preparing\u2026";
+  sub.reference = makeRef();
   let blob;
   try { ({blob} = await buildZip(sub)); }
   catch (e) { btn.disabled = false; btn.textContent = BUILD_LABEL; return showResult({err:["We couldn't read one of your photos (" + e.message + "). Please re-add your photos and try again."], warn:[]}); }
-  const name = `FamilyLore_Order_${slug(sub.game.name)}_${new Date().toISOString().slice(0,10)}.zip`;
+  const name = `FamilyLore_Order_${sub.reference}_${slug(sub.game.name)}.zip`;
   const url = URL.createObjectURL(blob), mb = (blob.size/1048576).toFixed(1);
   const copy = `<a href="${url}" download="${esc(name)}">download a copy</a>`;
   if (UPLOAD_URL && blob.size <= UPLOAD_MAX) {
     btn.textContent = `Sending ${mb} MB\u2026`;
     try {
       const r = await upload(blob, name, sub);
-      btn.disabled = false; btn.textContent = BUILD_LABEL;
-      return showResult(v, `<div class="msg ok"><b>Thank you, your order has been sent!</b><br>Reference: <b>${esc(r.ref || name)}</b>. We'll email you at <b>${esc(sub.contact.email)}</b> when your preview is ready. You can also ${copy} for your records.</div>`);
+      btn.textContent = "Order sent \u2713";      // stays disabled: one order, one reference
+      showResult({err:[], warn:[]}, confirmCard(sub, r.ref || sub.reference, true) + `<div class="msg ok">We'll email you at <b>${esc(sub.contact.email)}</b> when your preview is ready. You can also ${copy} for your records.</div>`);
+      return $("#confirm").scrollIntoView({behavior:"smooth", block:"center"});
     } catch (e) { /* fall through to download + email */ }
   }
   const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
   btn.disabled = false; btn.textContent = BUILD_LABEL;
   const why = UPLOAD_URL ? (blob.size > UPLOAD_MAX ? "Your order is too large to send from this page, so it has been saved instead." : "We couldn't send your order from this page, so it has been saved instead.") : "";
-  showResult(v, `<div class="msg ${UPLOAD_URL ? "warn" : "ok"}"><b>${why || "Your order file is ready."} ${esc(name)} (${mb} MB)</b><br>It should be in your Downloads folder (or ${copy}). Please email it to <b>${esc(RETURN_TO)}</b> with your Etsy order number. Etsy messages can't carry .zip files.${blob.size>20*1048576 ? " If email refuses it because of its size, share it with us using a file-transfer link such as WeTransfer." : ""}</div>`);
+  showResult(v, confirmCard(sub, sub.reference, false) + `<div class="msg ${UPLOAD_URL ? "warn" : "ok"}"><b>${why || "Your order file is ready."} ${esc(name)} (${mb} MB)</b><br>It should be in your Downloads folder (or ${copy}). Please email it to <b>${esc(RETURN_TO)}</b> with your order reference <b>${esc(sub.reference)}</b> and Etsy order number. Etsy messages can't carry .zip files.${blob.size>20*1048576 ? " If email refuses it because of its size, share it with us using a file-transfer link such as WeTransfer." : ""}</div>`);
 };
 $("#clear").onclick = () => { if (confirm("Clear everything you have entered on this form?")) { localStorage.removeItem(KEY); location.reload(); } };
 if (!restore()) { addPerson(); addPerson(); renderQs(); }
