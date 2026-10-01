@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Family Lore Order Form</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#14325a;--text:#2b3340;--mute:#667085;--line:#d5dbe6;--acc:#1f5fa8;--acc2:#e63946;--ok:#1e7b4e;--warn:#c77700;--err:#c0392b;--soft:#eef4fb}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151d;--card:#182030;--ink:#e6edf7;--text:#d3dbe8;--mute:#93a0b5;--line:#2c3a52;--acc:#6aa8f0;--soft:#1b2a40;--ok:#56c58e;--warn:#e3a43a;--err:#ff7b6b}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--ink);color:#fff;padding:28px 16px}
+header .w,main{max-width:860px;margin:0 auto}
+header h1{margin:0 0 4px;font-size:1.7rem}
+header p{margin:0;opacity:.9}
+main{padding:16px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin:16px 0}
+section>h2{margin:0 0 4px;color:var(--ink);font-size:1.25rem}
+.lead{color:var(--mute);margin:0 0 14px;font-size:.95rem}
+label{display:block;font-weight:600;margin:12px 0 4px;color:var(--ink);font-size:.92rem}
+label small,.hint{font-weight:400;color:var(--mute)}
+.hint{font-size:.85rem;margin-top:3px}
+input[type=text],input[type=email],input[type=tel],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--text);font:inherit}
+textarea{min-height:76px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--acc);outline-offset:1px}
+.row{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+@media (max-width:640px){.row{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0;background:var(--bg)}
+.card h3{margin:0 0 6px;font-size:1rem;color:var(--ink)}
+.opts{display:grid;gap:8px;grid-template-columns:1fr 1fr}
+@media (max-width:640px){.opts{grid-template-columns:1fr}}
+.opt{display:flex;gap:8px;align-items:center}
+.opt input[type=radio]{width:20px;height:20px;accent-color:var(--ok);flex:none}
+.opt b{width:1.2em;color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips label{display:inline-flex;align-items:center;gap:6px;margin:0;font-weight:500;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+button{font:inherit;cursor:pointer;border-radius:9px;border:1px solid var(--acc);background:var(--acc);color:#fff;padding:10px 18px;font-weight:600}
+button.ghost{background:transparent;color:var(--acc)}
+button.danger{background:transparent;border-color:var(--err);color:var(--err);padding:4px 10px;font-size:.85rem}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pics{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.pics figure{margin:0;position:relative}
+.pics img{width:76px;height:76px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.pics button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;padding:0;border-radius:50%;background:var(--err);border-color:var(--err);line-height:1}
+.count{font-size:.8rem;color:var(--mute);text-align:right}
+.count.bad{color:var(--err)}
+.msg{border-radius:10px;padding:12px 14px;margin:12px 0}
+.msg.err{background:color-mix(in srgb,var(--err) 12%,transparent);border:1px solid var(--err)}
+.msg.ok{background:color-mix(in srgb,var(--ok) 12%,transparent);border:1px solid var(--ok)}
+.msg.warn{background:color-mix(in srgb,var(--warn) 14%,transparent);border:1px solid var(--warn)}
+.msg ul{margin:6px 0 0 18px;padding:0}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 6px;padding:0;list-style:none;font-size:.85rem}
+.steps li{background:var(--soft);border-radius:999px;padding:3px 12px;color:var(--ink)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;border-radius:6px;padding:1px 7px;background:var(--soft);color:var(--acc);vertical-align:middle;margin-left:6px}
+.final{border-color:var(--acc2)}
+.hidden{display:none!important}
+#toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);max-width:90vw;background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;z-index:9;box-shadow:0 4px 18px #0006}
+details{margin:8px 0}
+summary{cursor:pointer;color:var(--acc);font-weight:600}
+</style>
+</head>
+<body>
+<header><div class="w">
+  <h1>Family Lore &ndash; Order Form</h1>
+  <p>Tell us about your family and we&rsquo;ll turn your stories and photos into a personalised game. It takes about 20&ndash;40 minutes. You can stop and come back: your text is saved on this device.</p>
+</div></header>
+<main>
+<ol class="steps"><li>1 About you</li><li>2 Your game</li><li>3 People &amp; photos</li><li>4 Questions</li><li>5 Send</li></ol>
+
+<section id="s1"><h2>1. About you</h2><p class="lead">So we know who to send your proofs to.</p>
+  <div class="row">
+    <div><label for="c_name">Your name *</label><input type="text" id="c_name" maxlength="80" autocomplete="name"></div>
+    <div><label for="c_email">Email *</label><input type="email" id="c_email" maxlength="120" autocomplete="email"></div>
+    <div><label for="c_phone">Phone <small>(optional)</small></label><input type="tel" id="c_phone" maxlength="30" autocomplete="tel"></div>
+    <div><label for="c_ref">Etsy order number <small>(from your Etsy receipt, so we can match your order)</small></label><input type="text" id="c_ref" maxlength="40"></div>
+  </div>
+</section>
+
+<section id="s2"><h2>2. Your game</h2><p class="lead">These exact words appear on your cards, instructions and box artwork, so please check the spelling.</p>
+  <label for="g_name">Game title *<span class="hint"> e.g. The Williams Family Memory Game</span></label><input type="text" id="g_name" maxlength="80">
+  <div class="row">
+    <div><label for="g_occ">Occasion *</label>
+      <select id="g_occ"><option value="">Choose&hellip;</option><option>Birthday</option><option>Wedding / anniversary</option><option>Christmas / holidays</option><option>Family reunion</option><option>Retirement</option><option>Just for fun</option><option>Other</option></select></div>
+    <div><label for="g_occ2">If other, tell us</label><input type="text" id="g_occ2" maxlength="60"></div>
+    <div><label for="g_tag">Tagline <small>(optional)</small></label><input type="text" id="g_tag" maxlength="60" placeholder="Laugh. Remember. Play."></div>
+    <div><label for="g_n">How many question cards? * <small>(minimum 10, maximum 30)</small></label>
+      <div class="row" style="flex-wrap:nowrap"><button type="button" class="ghost" id="nDown" aria-label="One fewer card">&minus;</button><select id="g_n"></select><button type="button" class="ghost" id="nUp" aria-label="One more card">+</button></div>
+      <div class="hint" id="nHint"></div></div>
+  </div>
+  <label for="g_aud">Who will play? <small>(ages, how many people &ndash; helps us pitch the humour)</small></label><input type="text" id="g_aud" maxlength="120" placeholder="e.g. 12 of us, ages 6 to 82">
+  <label for="g_bound">Off-limits topics <small>(people, events or subjects we must NOT joke about)</small></label>
+  <textarea id="g_bound" maxlength="400" placeholder="e.g. Nothing about Grandad's illness; don't mention the divorce; no jokes about weight."></textarea>
+  <label>How should the pictures on the cards look? *</label>
+  <div class="chips" role="radiogroup">
+    <label><input type="radio" name="artstyle" value="cartoon" checked> Cartoon illustrations</label>
+    <label><input type="radio" name="artstyle" value="photo"> My own photos</label>
+    <label><input type="radio" name="artstyle" value="mixed"> A mix (I&rsquo;ll choose per card)</label>
+  </div>
+  <p class="hint" id="artHelp"></p>
+  <label>Box cover picture</label>
+  <div class="chips" role="radiogroup">
+    <label><input type="radio" name="coverstyle" value="cartoon" checked> Cartoon of everyone</label>
+    <label><input type="radio" name="coverstyle" value="photo"> My own group photo</label>
+  </div>
+  <div id="coverPhotoBox" class="hidden"><label for="coverPhoto">Cover photo * <small>(one photo, portrait works best)</small></label><input type="file" id="coverPhoto" accept="image/*"><div class="pics" id="coverPics"></div></div>
+  <p class="hint">Everything is kept warm and family-friendly. Anything you list here is also checked against your questions before we start.</p>
+</section>
+
+<section id="s3"><h2>3. People &amp; photos</h2>
+  <p class="lead">Add everyone who appears in your game (pets too!). If you chose cartoons, we draw friendly cartoon versions of them from these photos. If you chose your own photos only, photos here are optional.</p>
+  <div class="msg warn"><b>Photo tips.</b> 1&ndash;3 clear photos per person: face clearly visible, good lighting, front or slightly turned, no sunglasses or hats covering the face. Group photos are fine, but tell us who is who in the notes.</div>
+  <div id="people"></div>
+  <div class="bar"><button type="button" class="ghost" id="addPerson">+ Add a person</button></div>
+</section>
+
+<section id="s4"><h2>4. Your questions</h2>
+  <p class="lead">How would you like to give us the content?</p>
+  <div class="chips" role="radiogroup">
+    <label><input type="radio" name="mode" value="questions" checked> I&rsquo;ll write the questions and answers</label>
+    <label><input type="radio" name="mode" value="memories"> I&rsquo;ll just share memories, you write the questions</label>
+  </div>
+  <div class="msg warn" id="modeHelp"><b>Tips.</b> Only real facts you give us are used as correct answers. The last question is the <b>Final wager</b> card in the Advanced game, so make it a good one. For &ldquo;which is NOT true&rdquo; questions, mark the <em>false</em> statement as the correct answer.</div>
+  <div id="qs"></div>
+</section>
+
+<section id="s5"><h2>5. Check &amp; send</h2>
+  <label style="display:flex;gap:8px;font-weight:500"><input type="checkbox" id="p1" style="width:20px;height:20px;flex:none"> I own or have permission to use every photo I&rsquo;m sending, and the people in them are happy to be drawn as cartoons. *</label>
+  <label style="display:flex;gap:8px;font-weight:500"><input type="checkbox" id="p2" style="width:20px;height:20px;flex:none"> I understand the pictures are caricatures and that every answer I mark as correct is taken as true. *</label>
+  <div class="bar" style="margin-top:16px">
+    <button type="button" id="check" class="ghost">Check my answers</button>
+    <button type="button" id="build">Send my order</button>
+    <button type="button" id="clear" class="danger">Clear everything</button>
+  </div>
+  <div id="result" aria-live="polite"></div>
+</section>
+</main>
+
+<div id="toast" class="hidden" role="status" aria-live="polite"></div>
+<script>
+"use strict";
+const MAX_PHOTO = 25 * 1048576, MAX_ALL = 150 * 1048576;
+let toastT;
+function notify(msg) { const t = document.getElementById("toast"); t.textContent = msg; t.classList.remove("hidden"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.add("hidden"), 7000); }
+// Accept only ordinary web images; phone HEIC/HEIF files cannot be read by our tools.
+function okImage(f) {
+  const ext = (f.name.split(".").pop() || "").toLowerCase();
+  if (/^(heic|heif)$/.test(ext) || /hei[cf]/i.test(f.type)) return `${f.name}: iPhone HEIC photos can't be used. Please choose the photo again as JPG (on iPhone: Settings > Camera > Formats > Most Compatible, or share it as "Most Compatible").`;
+  if (!/^(jpe?g|png|webp|gif|bmp|tiff?)$/.test(ext) || (f.type && !/^image\//.test(f.type))) return `${f.name}: this is not a photo file (use JPG or PNG).`;
+  if (f.size > MAX_PHOTO) return `${f.name}: too large (${(f.size/1048576).toFixed(0)} MB). Please use a photo under 25 MB.`;
+  if (f.size < 2000) return `${f.name}: this file is too small to be a real photo.`;
+  return "";
+}
+function addFiles(list, incoming, max) {
+  const out = list.slice();
+  for (const f of incoming) {
+    const bad = okImage(f); if (bad) { notify(bad); continue; }
+    if (out.some(x => x.name === f.name && x.size === f.size && x.lastModified === f.lastModified)) { notify(`${f.name} is already added.`); continue; }
+    if (out.length >= max) { notify(`Only ${max} photo${max>1?"s":""} allowed here; the extra file was ignored.`); break; }
+    out.push(f);
+  }
+  return out;
+}
+// Characters we can print correctly: Latin (incl. accents), Greek, Cyrillic and ordinary punctuation.
+const PRINTABLE = /^[\u0020-\u007E\u00A0-\u024F\u0370-\u03FF\u0400-\u04FF\u1E00-\u1EFF\u2010-\u2027\u2030-\u205E\u20AC\u2122]*$/;
+const badChars = s => [...new Set([...(s||"")].filter(ch => !PRINTABLE.test(ch)))].join(" ");
+const FORM_VERSION = "1.2";
+const RETURN_TO = "hamzahrizvi2@gmail.com";   // shown to customers if the upload fails
+const UPLOAD_URL = "";          // Google Apps Script web-app URL (intake/drive-upload/Code.gs); empty = download + email only
+const UPLOAD_MAX = 35 * 1048576;  // base64 inflates by a third; Apps Script accepts ~50 MB per request
+const ROUNDS = ["WHO DID IT?","COMPLETE THE MEMORY","WHO SAID IT?","TWO TRUTHS & A LIE","GUESS THE YEAR","FINISH THE QUOTE","FAMILY SUPERLATIVES","WHO KNOWS THEM BEST?","FINAL FAMILY MYSTERY"];
+const MISSION_TYPES = ["CHARADES","IMPRESSION","SKETCH IT","DANCE-OFF","OTHER"];
+const LIM = {question:120, option:34, story:90, scene:160};
+const KEY = "familylore-order-v1";
+const $ = (s, r=document) => r.querySelector(s), $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const slug = s => (s||"").toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"") || "person";
+
+let people = [];                 // {id, name, role, pet, look, files:[File]}
+let uid = 0;
+let cardPhotos = {};             // question number -> File (own-photo cards)
+let coverFile = null;
+const artStyle = () => $("input[name=artstyle]:checked").value;
+const coverStyle = () => $("input[name=coverstyle]:checked").value;
+const artOf = d => { const st = artStyle(); if (st !== "mixed") return st; const r = $(`input[name=art${d.dataset.i}]:checked`, d); return r ? r.value : "cartoon"; };
+const thumb = (file, onDel) => { const fig = document.createElement("figure"), img = document.createElement("img"), x = document.createElement("button");
+  img.alt = file.name; img.src = URL.createObjectURL(file); x.type = "button"; x.textContent = "\u00d7"; x.title = "Remove photo"; x.setAttribute("aria-label", "Remove photo"); x.onclick = onDel; fig.append(img, x); return fig; };
+function needCartoon() { return coverStyle() === "cartoon" || $$("#qs .card").some(d => artOf(d) === "cartoon"); }
+function artBlock(i, s) {
+  return `<div data-artchoice class="${artStyle()==="mixed"?"":"hidden"}"><label>Picture for this card</label><div class="chips"><label><input type="radio" name="art${i}" value="cartoon" ${s.art!=="photo"?"checked":""}> Cartoon</label><label><input type="radio" name="art${i}" value="photo" ${s.art==="photo"?"checked":""}> My own photo</label></div></div>
+  <div data-photo class="hidden"><label>Your photo for this card * <small>(landscape photos fill the card best; it is shown whole, never cropped)</small></label><input type="file" accept="image/*" data-cardfile><div class="pics" data-cardpic></div></div>`;
+}
+function applyArt(d) {
+  const a = artOf(d); d._art = a;
+  $$("[data-cartoon]", d).forEach(e => e.classList.toggle("hidden", a === "photo"));
+  $("[data-photo]", d).classList.toggle("hidden", a !== "photo");
+  $("[data-artchoice]", d).classList.toggle("hidden", artStyle() !== "mixed");
+  const i = +d.dataset.i, box = $("[data-cardpic]", d); box.innerHTML = "";
+  if (cardPhotos[i]) box.appendChild(thumb(cardPhotos[i], () => { delete cardPhotos[i]; applyArt(d); }));
+}
+
+/* ---------- people ---------- */
+function addPerson(data) {
+  people.push(Object.assign({id:"p"+(++uid), name:"", role:"", pet:false, look:"", files:[]}, data||{}));
+  renderPeople();
+}
+function renderPeople() {
+  const box = $("#people"); box.innerHTML = "";
+  people.forEach((p, i) => {
+    const d = document.createElement("div"); d.className = "card";
+    d.innerHTML = `<h3>Person ${i+1} ${i<2?'<span class="tag" data-need>required</span>':''}</h3>
+      <div class="row">
+        <div><label>Name, exactly as it should be printed *</label><input type="text" data-k="name" maxlength="30" value="${esc(p.name)}" placeholder="e.g. Dad, Uncle Dave, Sarah"></div>
+        <div><label>Who are they? <small>(relationship)</small></label><input type="text" data-k="role" maxlength="50" value="${esc(p.role)}" placeholder="e.g. Grandfather, the birthday girl"></div>
+      </div>
+      <label style="display:flex;gap:8px;font-weight:500"><input type="checkbox" data-k="pet" ${p.pet?"checked":""} style="width:18px;height:18px"> This is a pet</label>
+      <label>What do they look like? <small>(hair, glasses, beard, usual clothes, anything distinctive. We never guess.)</small></label>
+      <textarea data-k="look" maxlength="300" placeholder="e.g. Short grey hair, black-framed glasses, white moustache, loves a straw hat and blue shirts">${esc(p.look)}</textarea>
+      <label>Photos <small>(1&ndash;3; JPG or PNG)</small></label>
+      <input type="file" accept="image/*" multiple data-files>
+      <div class="pics"></div>
+      ${people.length>2?'<div style="margin-top:8px"><button type="button" class="danger" data-del>Remove this person</button></div>':""}`;
+    box.appendChild(d);
+    const pics = $(".pics", d);
+    p.files.forEach((f, fi) => {
+      const fig = document.createElement("figure");
+      const img = document.createElement("img"); img.alt = f.name; img.src = URL.createObjectURL(f);
+      const x = document.createElement("button"); x.type = "button"; x.textContent = "×"; x.title = "Remove photo"; x.setAttribute("aria-label","Remove photo");
+      x.onclick = () => { p.files.splice(fi,1); renderPeople(); };
+      fig.append(img, x); pics.appendChild(fig);
+    });
+    $$("[data-k]", d).forEach(el => el.addEventListener("input", () => { p[el.dataset.k] = el.type==="checkbox" ? el.checked : el.value; if (el.dataset.k==="name") refreshChips(); save(); }));
+    $("[data-files]", d).addEventListener("change", e => { p.files = addFiles(p.files, e.target.files, 3); renderPeople(); });
+    const del = $("[data-del]", d); if (del) del.onclick = () => { people = people.filter(x => x!==p); renderPeople(); refreshChips(); save(); };
+  });
+  refreshChips(); if (typeof updateArtHelp === 'function') updateArtHelp(); updateCount();
+}
+
+/* ---------- questions ---------- */
+function nQ() { return +$("#g_n").value; }
+function mode() { return $('input[name=mode]:checked').value; }
+function renderQs(saved) {
+  const box = $("#qs"); box.innerHTML = "";
+  const n = nQ(), m = mode();
+  for (let i=1;i<=n;i++) {
+    const s = (saved && saved[i-1]) || {};
+    const d = document.createElement("div"); d.className = "card" + (i===n ? " final" : ""); d.dataset.i = i;
+    if (m === "questions") {
+      d.innerHTML = `<h3>Question ${i}${i===n?'<span class="tag">FINAL WAGER CARD</span>':''}</h3>
+        <div class="row">
+          <div><label>Round <small>(or let us choose)</small></label><select data-k="round"><option value="">Let you choose</option>${ROUNDS.map(r=>`<option${s.round===r?" selected":""}>${esc(r)}</option>`).join("")}</select></div>
+          <div></div>
+        </div>
+        <label>The question *</label><input type="text" data-k="question" maxlength="${LIM.question}" value="${esc(s.question||"")}" placeholder="e.g. Who accidentally locked themselves outside the villa in Tenerife?">
+        <div class="count" data-c="question"></div>
+        <label>Answer options <small>(fill in 4, or 2 for a simple either/or) &ndash; tick the CORRECT one *</small></label>
+        <div class="opts">${[0,1,2,3].map(k=>`<div class="opt"><input type="radio" name="cor${i}" value="${k}" ${String(s.correct)===String(k)?"checked":""} aria-label="Option ${"ABCD"[k]} is correct"><b>${"ABCD"[k]}</b><input type="text" data-o="${k}" maxlength="${LIM.option}" value="${esc((s.options||[])[k]||"")}" placeholder="Option ${"ABCD"[k]}"></div>`).join("")}</div>
+        ${artBlock(i, s)}
+        <div data-cartoon><label>Who is in the picture? <small>(tick everyone)</small></label><div class="chips" data-who></div>
+        <label>What&rsquo;s the scene? <small>(where is it, what&rsquo;s happening, any props)</small></label><input type="text" data-k="scene" maxlength="${LIM.scene}" value="${esc(s.scene||"")}" placeholder="e.g. Outside a sunny Tenerife villa, suitcase by the door"></div>
+        <label>The story behind it <small>(one line for the host to read after the reveal)</small></label><input type="text" data-k="story" maxlength="${LIM.story}" value="${esc(s.story||"")}" placeholder="e.g. Locked himself out while the rest of us were at the pool.">
+        <label style="display:flex;gap:8px;font-weight:500;flex-wrap:wrap"><input type="checkbox" data-k="mission" ${s.mission?"checked":""} style="width:18px;height:18px"> Also make this a silly <b>Mission</b> for the Advanced game (act it out, draw it&hellip;)
+          <select data-k="mtype" style="width:auto"><option value="">Type&hellip;</option>${MISSION_TYPES.map(t=>`<option${s.mtype===t?" selected":""}>${t}</option>`).join("")}</select></label>`;
+    } else {
+      d.innerHTML = `<h3>Memory ${i}${i===n?'<span class="tag">FINAL WAGER CARD</span>':''}</h3>
+        <label>What happened? *<span class="hint"> Who, where, what &ndash; as much detail as you like. Only facts you write are used as true.</span></label>
+        <textarea data-k="memory" maxlength="600" placeholder="e.g. Dad drove 40 miles from the petrol station before realising Mum was still inside.">${esc(s.memory||"")}</textarea>
+        <div class="row"><div><label>When / where <small>(optional)</small></label><input type="text" data-k="when" maxlength="60" value="${esc(s.when||"")}" placeholder="e.g. Spain, 2014"></div>
+        <div><label>Wrong-answer ideas <small>(optional)</small></label><input type="text" data-k="wrong" maxlength="200" value="${esc(s.wrong||"")}" placeholder="e.g. Uncle Dave, Grandad, James"></div></div>
+        ${artBlock(i, s)}
+        <div data-cartoon><label>Who is in it? <small>(tick everyone)</small></label><div class="chips" data-who></div></div>
+        <label style="display:flex;gap:8px;font-weight:500;flex-wrap:wrap"><input type="checkbox" data-k="mission" ${s.mission?"checked":""} style="width:18px;height:18px"> Would make a good silly <b>Mission</b>
+          <select data-k="mtype" style="width:auto"><option value="">Type&hellip;</option>${MISSION_TYPES.map(t=>`<option${s.mtype===t?" selected":""}>${t}</option>`).join("")}</select></label>`;
+    }
+    d._who = new Set(s.who||[]);
+    box.appendChild(d);
+    wireQ(d); applyArt(d);
+  }
+  refreshChips(); updateCounts();
+}
+function wireQ(d) {
+  d.addEventListener("input", () => { updateCounts(); save(); });
+  d.addEventListener("change", e => {
+    if (e.target.matches("[data-cardfile]")) { const f = e.target.files[0]; if (f) { const bad = okImage(f); if (bad) notify(bad); else cardPhotos[+d.dataset.i] = f; } e.target.value = ""; }
+    if (e.target.name === "art" + d.dataset.i || e.target.matches("[data-cardfile]")) { applyArt(d); updateArtHelp(); }
+    save();
+  });
+}
+function updateArtHelp() {
+  const st = artStyle(), h = { cartoon: "We turn your people photos into cartoon caricatures for every card.", photo: "Your own photo is printed on each card, shown whole. You will attach one photo per card below.", mixed: "Choose cartoon or your own photo for each card below." };
+  $("#artHelp").textContent = h[st];
+  $("#coverPhotoBox").classList.toggle("hidden", coverStyle() !== "photo");
+  $$("#people [data-need]").forEach(e => e.textContent = needCartoon() ? "required" : "optional");
+}
+function refreshChips() {
+  $$("#qs .card").forEach(d => {
+    const w = $("[data-who]", d); if (!w) return;
+    w.innerHTML = "";
+    people.filter(p=>p.name.trim()).forEach(p => {
+      const l = document.createElement("label"); const c = document.createElement("input"); c.type = "checkbox"; c.checked = d._who.has(p.name.trim());
+      c.onchange = () => { c.checked ? d._who.add(p.name.trim()) : d._who.delete(p.name.trim()); save(); };
+      l.append(c, " " + p.name.trim()); w.appendChild(l);
+    });
+    if (!w.children.length) w.innerHTML = '<span class="hint">Add people in step 3 first.</span>';
+  });
+}
+function updateCounts() {
+  $$("#qs .card").forEach(d => {
+    const q = $('[data-k=question]', d), c = $('[data-c=question]', d);
+    if (q && c) { c.textContent = q.value.length + "/" + LIM.question; c.classList.toggle("bad", q.value.length > 100); }
+  });
+}
+
+/* ---------- collect / validate ---------- */
+function collect() {
+  const n = nQ(), m = mode();
+  const items = $$("#qs .card").map(d => {
+    const g = k => { const e = $(`[data-k=${k}]`, d); return e ? (e.type==="checkbox" ? e.checked : e.value.trim()) : ""; };
+    const o = { n:+d.dataset.i, people:[...d._who], mission: g("mission") ? {enabled:true, type:g("mtype")} : {enabled:false, type:""} };
+    o.art = d._art || "cartoon";
+    if (m === "questions") {
+      o.round = g("round"); o.question = g("question"); o.scene = g("scene"); o.story = g("story");
+      o.options = $$("[data-o]", d).map(e => e.value.trim());
+      const r = $(`input[name=cor${d.dataset.i}]:checked`, d); o.correct_index = r ? +r.value : null;
+    } else { o.memory = g("memory"); o.when = g("when"); o.wrong_ideas = g("wrong"); }
+    return o;
+  });
+  return {
+    schema:"familylore-intake-v1", form_version:FORM_VERSION, submitted_at:new Date().toISOString(),
+    contact:{name:$("#c_name").value.trim(), email:$("#c_email").value.trim(), phone:$("#c_phone").value.trim(), order_ref:$("#c_ref").value.trim()},
+    game:{name:$("#g_name").value.trim(), occasion:$("#g_occ").value==="Other" ? ($("#g_occ2").value.trim()||"Other") : $("#g_occ").value, tagline:$("#g_tag").value.trim()||"Laugh. Remember. Play.",
+          question_count:n, audience:$("#g_aud").value.trim(), humour_boundaries:$("#g_bound").value.trim(),
+          art_style:artStyle(), cover_style:coverStyle()},
+    people: people.map(p => ({id:p.id, name:p.name.trim(), role:p.role.trim(), is_pet:p.pet, appearance:p.look.trim(), photos:[]})),
+    content_mode:m,
+    items,
+    permission:{photos:$("#p1").checked, accuracy:$("#p2").checked}
+  };
+}
+function validate(sub) {
+  const err = [], warn = [];
+  const c = sub.contact, g = sub.game;
+  if (!c.name) err.push("Step 1: please enter your name.");
+  if (!/^\S+@\S+\.\S+$/.test(c.email)) err.push("Step 1: please enter a valid email address.");
+  if (!g.name) err.push("Step 2: please enter the game title.");
+  if (!g.occasion) err.push("Step 2: please choose the occasion.");
+  const names = sub.people.map(p=>p.name.toLowerCase());
+  const allFiles = [...people.flatMap(p => p.files), ...Object.values(cardPhotos), ...(coverFile ? [coverFile] : [])];
+  if (allFiles.reduce((a, f) => a + f.size, 0) > MAX_ALL) err.push(`Step 3: your photos total more than ${MAX_ALL/1048576} MB. Remove a few, or send the largest ones to us separately.`);
+  [["Step 2: the game title", g.name], ["Step 2: the tagline", g.tagline], ...sub.people.map(p => [`Step 3: the name "${p.name}"`, p.name]),
+   ...sub.items.flatMap(it => sub.content_mode === "questions" ? [[`Question ${it.n}`, [it.question, it.story, ...it.options].join(" ")]] : [])]
+    .forEach(([label, text]) => { const b = badChars(text); if (b) err.push(`${label} contains characters we can't print: ${b}. Please use letters from the Latin, Greek or Cyrillic alphabets (no emoji).`); });
+  if (sub.game.question_count < 10 || sub.game.question_count > 30) err.push("Step 2: choose between 10 and 30 questions.");
+  const cart = needCartoon();
+  if (coverStyle() === "photo" && !coverFile) err.push("Step 2: attach your cover photo (or choose the cartoon cover).");
+  sub.people.forEach((p,i) => {
+    if (!p.name) err.push(`Step 3: person ${i+1} needs a name.`);
+    if (!people[i].files.length && (cart || i>=2)) (i<2 ? err : warn).push(`Step 3: ${p.name||"person "+(i+1)} has no photo${i<2?"":" (their pictures will be less accurate)"}.`);
+    if (!p.appearance) warn.push(`Step 3: ${p.name||"person "+(i+1)} has no appearance notes.`);
+  });
+  if (new Set(names).size !== names.length) err.push("Step 3: two people have the same name. Please make each name unique (e.g. 'Dave (Uncle)').");
+  if (sub.people.length < 2) err.push("Step 3: please add at least two people.");
+  const bounds = g.humour_boundaries.toLowerCase().split(/[,;\n.]+/).map(s=>s.trim()).filter(s=>s.length>3);
+  sub.items.forEach(it => {
+    const t = `Question ${it.n}`, txt = (sub.content_mode==="questions" ? [it.question,it.scene,it.story,...it.options] : [it.memory]).join(" ").toLowerCase();
+    if (it.art === "photo" && !cardPhotos[it.n]) err.push(`${t}: attach your photo for this card (or switch it to cartoon).`);
+    if (sub.content_mode === "questions") {
+      if (!it.question) err.push(`${t}: write the question.`);
+      const filled = it.options.filter(Boolean);
+      if (![2,4].includes(filled.length)) err.push(`${t}: fill in exactly 4 options (or exactly 2).`);
+      if (new Set(filled.map(s=>s.toLowerCase())).size !== filled.length) err.push(`${t}: two options are identical.`);
+      if (it.correct_index===null || !it.options[it.correct_index]) err.push(`${t}: tick which option is correct.`);
+      if (it.art === "cartoon" && !it.people.length) warn.push(`${t}: nobody is ticked as being in the picture.`);
+      if (it.art === "cartoon" && !it.scene) warn.push(`${t}: no scene described; we will draw a generic one.`);
+      if (!it.story) warn.push(`${t}: no 'story behind it' line for the host.`);
+      it.options.forEach((o,k) => { if (o && o.length>LIM.option) err.push(`${t}: option ${"ABCD"[k]} is too long for the card.`); });
+    } else if (!it.memory) err.push(`Memory ${it.n}: please describe what happened.`);
+    if (it.mission.enabled && !it.mission.type) warn.push(`${t}: Mission ticked but no type chosen; we will pick one.`);
+    bounds.forEach(b => { if (b && txt.includes(b)) warn.push(`${t}: mentions "${b}", which is on your off-limits list. Is that intended?`); });
+  });
+  if (!sub.permission.photos || !sub.permission.accuracy) err.push("Step 5: please tick both confirmations.");
+  return {err, warn};
+}
+function showResult(v, extra) {
+  const r = $("#result");
+  let h = "";
+  if (v.err.length) h += `<div class="msg err"><b>${v.err.length} thing${v.err.length>1?"s":""} to fix before we can send this:</b><ul>${v.err.map(e=>`<li>${esc(e)}</li>`).join("")}</ul></div>`;
+  if (v.warn.length) h += `<div class="msg warn"><b>Worth a look (you can still send):</b><ul>${v.warn.map(e=>`<li>${esc(e)}</li>`).join("")}</ul></div>`;
+  if (!v.err.length && !v.warn.length) h += `<div class="msg ok">Everything looks complete.</div>`;
+  r.innerHTML = h + (extra||"");
+  r.scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+
+/* ---------- zip (store only) ---------- */
+const CRC = (() => { const t = new Uint32Array(256); for (let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c = c&1 ? 0xEDB88320^(c>>>1) : c>>>1; t[n]=c>>>0; } return t; })();
+const crc32 = b => { let c = 0xFFFFFFFF; for (let i=0;i<b.length;i++) c = CRC[(c^b[i])&255]^(c>>>8); return (c^0xFFFFFFFF)>>>0; };
+function makeZip(files) {           // files: [{name, data:Uint8Array}]
+  const enc = new TextEncoder(), parts = [], cen = []; let off = 0;
+  const d = new Date(), time = (d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1), date = ((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate();
+  const u16 = v => [v&255,(v>>8)&255], u32 = v => [v&255,(v>>8)&255,(v>>16)&255,(v>>>24)&255];
+  for (const f of files) {
+    const nm = enc.encode(f.name), crc = crc32(f.data), sz = f.data.length;
+    const lh = new Uint8Array([0x50,0x4b,3,4,20,0,0,8,0,0,...u16(time),...u16(date),...u32(crc),...u32(sz),...u32(sz),...u16(nm.length),0,0]);
+    parts.push(lh, nm, f.data);
+    cen.push({nm, crc, sz, off}); off += lh.length + nm.length + sz;
+  }
+  const cstart = off, cparts = [];
+  for (const c of cen) {
+    const h = new Uint8Array([0x50,0x4b,1,2,20,0,20,0,0,8,0,0,...u16(time),...u16(date),...u32(c.crc),...u32(c.sz),...u32(c.sz),...u16(c.nm.length),0,0,0,0,0,0,0,0,0,0,0,0,...u32(c.off)]);
+    cparts.push(h, c.nm); off += h.length + c.nm.length;
+  }
+  const end = new Uint8Array([0x50,0x4b,5,6,0,0,0,0,...u16(cen.length),...u16(cen.length),...u32(off-cstart),...u32(cstart),0,0]);
+  return new Blob([...parts, ...cparts, end], {type:"application/zip"});
+}
+async function buildZip(sub) {
+  const enc = new TextEncoder(), files = []; let total = 0;
+  for (let i=0;i<people.length;i++) {
+    const p = people[i];
+    for (let k=0;k<p.files.length;k++) {
+      const f = p.files[k], ext = (f.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"") || "jpg";
+      const path = `photos/${slug(p.name)}_${k+1}.${ext}`;
+      const data = new Uint8Array(await f.arrayBuffer()); total += data.length;
+      files.push({name:path, data}); sub.people[i].photos.push({file:path, original_name:f.name, bytes:data.length});
+    }
+  }
+  const addPhoto = async (f, path) => { const data = new Uint8Array(await f.arrayBuffer()); total += data.length; files.push({name:path, data}); return {file:path, original_name:f.name, bytes:data.length}; };
+  const ext = f => (f.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"") || "jpg";
+  for (const it of sub.items) if (it.art === "photo" && cardPhotos[it.n]) it.card_photo = await addPhoto(cardPhotos[it.n], `photos/cards/q${String(it.n).padStart(2,"0")}.${ext(cardPhotos[it.n])}`);
+  if (sub.game.cover_style === "photo" && coverFile) sub.game.cover_photo = await addPhoto(coverFile, `photos/cover.${ext(coverFile)}`);
+  files.unshift({name:"submission.json", data:enc.encode(JSON.stringify(sub, null, 2))});
+  files.push({name:"README.txt", data:enc.encode("Family Lore order file.\nDo not edit. Send this whole .zip back to us.\nContains submission.json and your photos.\n")});
+  return {blob:makeZip(files), total};
+}
+
+/* ---------- save / load draft ---------- */
+function save() {
+  try {
+    const items = $$("#qs .card").map(d => { const o = {who:[...d._who], art:d._art}; $$("[data-k]", d).forEach(e => o[e.dataset.k] = e.type==="checkbox" ? e.checked : e.value);
+      o.options = $$("[data-o]", d).map(e=>e.value); const r = $(`input[name=cor${d.dataset.i}]:checked`, d); o.correct = r ? r.value : null; return o; });
+    const flds = {}; $$("main input[id],main select[id],main textarea[id]").forEach(e => flds[e.id] = e.type==="checkbox" ? e.checked : e.value);
+    localStorage.setItem(KEY, JSON.stringify({flds, mode:mode(), artstyle:artStyle(), coverstyle:coverStyle(), people:people.map(({files,...r})=>r), items}));
+  } catch(e) {}
+}
+function restore() {
+  try {
+    const raw = localStorage.getItem(KEY); if (!raw) return false;
+    const s = JSON.parse(raw);
+    for (const [id,v] of Object.entries(s.flds||{})) { const e = document.getElementById(id); if (e) e.type==="checkbox" ? e.checked = v : e.value = v; }
+    $(`input[name=mode][value=${s.mode}]`).checked = true;
+    if (s.artstyle) $(`input[name=artstyle][value=${s.artstyle}]`).checked = true;
+    if (s.coverstyle) $(`input[name=coverstyle][value=${s.coverstyle}]`).checked = true;
+    people = (s.people||[]).map(p => Object.assign({files:[]}, p)); uid = people.length ? Math.max(...people.map(p=>+p.id.slice(1)||0)) : 0;
+    renderQs(s.items); return people.length>0;
+  } catch(e) { return false; }
+}
+
+/* ---------- wire up ---------- */
+$("#g_n").innerHTML = Array.from({length:21}, (_, k) => `<option value="${k+10}">${k+10}</option>`).join("");
+$("#addPerson").onclick = () => { addPerson(); save(); };
+const keepQs = () => $$("#qs .card").map(d => { const o = {who:[...d._who], art:d._art}; $$("[data-k]", d).forEach(e => o[e.dataset.k] = e.type==="checkbox" ? e.checked : e.value); o.options = $$("[data-o]", d).map(e => e.value); const r = $(`input[name=cor${d.dataset.i}]:checked`, d); o.correct = r ? r.value : null; return o; });
+$$("input[name=artstyle]").forEach(r => r.onchange = () => { renderQs(keepQs()); updateArtHelp(); save(); });
+$$("input[name=coverstyle]").forEach(r => r.onchange = () => { updateArtHelp(); save(); });
+$("#coverPhoto").onchange = e => { const f = e.target.files[0]; const bad = f && okImage(f); if (bad) notify(bad); else if (f) { coverFile = f; const b = $("#coverPics"); b.innerHTML = ""; b.appendChild(thumb(f, () => { coverFile = null; b.innerHTML = ""; })); } e.target.value = ""; };
+function updateCount() {
+  const n = nQ();
+  $("#nHint").innerHTML = `<b>${n} question cards.</b> Please choose the number you bought (10, 20 or 30). Depending on your option you also get the online game for any screen and/or the print-ready printer pack: mission cards (you choose which), 6 power-up cards, box artwork, instructions and a scorecard.`;
+  $("#nDown").disabled = n <= 10; $("#nUp").disabled = n >= 30;
+}
+const bump = d => { const sel = $("#g_n"), v = Math.max(10, Math.min(30, +sel.value + d)); if (v !== +sel.value) { sel.value = v; sel.dispatchEvent(new Event("change")); } };
+$("#nDown").onclick = () => bump(-1); $("#nUp").onclick = () => bump(1);
+$("#g_n").onchange = () => { renderQs(keepQs()); updateArtHelp(); updateCount(); save(); };
+$$("input[name=mode]").forEach(r => r.onchange = () => { renderQs(); updateArtHelp(); save(); });
+$$("main input[id],main select[id],main textarea[id]").forEach(e => e.addEventListener("input", save));
+$("#check").onclick = () => showResult(validate(collect()));
+async function upload(blob, name, sub) {
+  const b64 = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(",")[1]); r.onerror = () => rej(r.error); r.readAsDataURL(blob); });
+  const resp = await fetch(UPLOAD_URL, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"},   // text/plain: no CORS preflight
+    body: JSON.stringify({name, order_ref:sub.contact.order_ref, customer:sub.contact.name, email:sub.contact.email, game:sub.game.name, data:b64})});
+  const j = await resp.json(); if (!j.ok) throw new Error(j.error || "upload refused"); return j;
+}
+const BUILD_LABEL = "Send my order";
+$("#build").onclick = async () => {
+  const btn = $("#build"); if (btn.disabled) return;
+  const sub = collect(), v = validate(sub);
+  if (v.err.length) return showResult(v);
+  btn.disabled = true; btn.textContent = "Preparing\u2026";
+  let blob;
+  try { ({blob} = await buildZip(sub)); }
+  catch (e) { btn.disabled = false; btn.textContent = BUILD_LABEL; return showResult({err:["We couldn't read one of your photos (" + e.message + "). Please re-add your photos and try again."], warn:[]}); }
+  const name = `FamilyLore_Order_${slug(sub.game.name)}_${new Date().toISOString().slice(0,10)}.zip`;
+  const url = URL.createObjectURL(blob), mb = (blob.size/1048576).toFixed(1);
+  const copy = `<a href="${url}" download="${esc(name)}">download a copy</a>`;
+  if (UPLOAD_URL && blob.size <= UPLOAD_MAX) {
+    btn.textContent = `Sending ${mb} MB\u2026`;
+    try {
+      const r = await upload(blob, name, sub);
+      btn.disabled = false; btn.textContent = BUILD_LABEL;
+      return showResult(v, `<div class="msg ok"><b>Thank you, your order has been sent!</b><br>Reference: <b>${esc(r.ref || name)}</b>. We'll email you at <b>${esc(sub.contact.email)}</b> when your preview is ready. You can also ${copy} for your records.</div>`);
+    } catch (e) { /* fall through to download + email */ }
+  }
+  const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  btn.disabled = false; btn.textContent = BUILD_LABEL;
+  const why = UPLOAD_URL ? (blob.size > UPLOAD_MAX ? "Your order is too large to send from this page, so it has been saved instead." : "We couldn't send your order from this page, so it has been saved instead.") : "";
+  showResult(v, `<div class="msg ${UPLOAD_URL ? "warn" : "ok"}"><b>${why || "Your order file is ready."} ${esc(name)} (${mb} MB)</b><br>It should be in your Downloads folder (or ${copy}). Please email it to <b>${esc(RETURN_TO)}</b> with your Etsy order number. Etsy messages can't carry .zip files.${blob.size>20*1048576 ? " If email refuses it because of its size, share it with us using a file-transfer link such as WeTransfer." : ""}</div>`);
+};
+$("#clear").onclick = () => { if (confirm("Clear everything you have entered on this form?")) { localStorage.removeItem(KEY); location.reload(); } };
+if (!restore()) { addPerson(); addPerson(); renderQs(); }
+else { renderPeople(); if (people.length<2) addPerson(); }
+updateArtHelp(); updateCount();
+</script>
+</body>
+</html>
